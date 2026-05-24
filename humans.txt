@@ -1,0 +1,14 @@
+/* TEAM */
+Photographer & Creator: Mark Olenberg
+Site: https://matchmaker-frankfurt.de
+Email: info@olenberg-media.de
+Location: Frankfurt am Main, Germany
+
+/* SITE */
+Last update: 2026-05-19
+Language: German
+Standards: HTML5, CSS3, PHP 8+
+Components: Tailwind CSS, Lucide Icons, GSAP, Custom Scroll Animations
+Software: PHP, Apache
+Hosting: Hostinger
+IDE: Developed with AI assistance

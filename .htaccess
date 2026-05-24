@@ -1,0 +1,159 @@
+# ===================================
+# CLEAN URL REWRITING & SECURITY
+# Gold Standard Implementation (Subdirectory Safe)
+# ===================================
+
+RewriteEngine On
+
+# DO NOT set RewriteBase to allow dynamic subdirectory routing on localhost
+RewriteBase /
+
+DirectoryIndex index.php index.html
+
+# ===================================
+# 1. SECURITY HEADERS
+# ===================================
+<IfModule mod_headers.c>
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# ===================================
+# 2. CANONICAL REDIRECTS (PRODUCTION ONLY)
+# ===================================
+
+# 2.0 INDEX REDIRECT (Production only)
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/(.*/)?index(\.php|\.html)?/?(\s|\?) [NC]
+RewriteRule ^(.*)index(\.(php|html))?/?$ https://matchmaker-frankfurt.de/$1 [L,R=301]
+
+# 2.1 DIRECT PHP ACCESS REDIRECTS (Production only - Prevent Duplicate Content)
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/22-gruende\.php [NC]
+RewriteRule ^ /22-gruende/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/warum-es-funktioniert\.php [NC]
+RewriteRule ^ /warum-es-funktioniert/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/dein-fotograf\.php [NC]
+RewriteRule ^ /dein-fotograf/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/kontakt\.php [NC]
+RewriteRule ^ /kontakt/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/impressum\.php [NC]
+RewriteRule ^ /impressum/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/datenschutz\.php [NC]
+RewriteRule ^ /datenschutz/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/ratgeber\.php [NC]
+RewriteRule ^ /ratgeber/ [L,R=301]
+
+# 2.2 CANONICAL HOST REDIRECTS FOR PRODUCTION (Force HTTPS + Non-WWW)
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{REQUEST_METHOD} !POST
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [OR]
+RewriteCond %{HTTPS} off [OR]
+RewriteCond %{HTTP_HOST} ^www\. [NC]
+RewriteRule ^(.*)$ https://matchmaker-frankfurt.de/$1 [L,R=301]
+
+# ===================================
+# 3. GLOBAL DIRECTORY TRAILING SLASH
+# ===================================
+
+# Force Trailing Slash (Subdirectory-Safe for Localhost and Production)
+# If not a file, has no extension, and lacks a trailing slash, redirect to add it
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_URI} !(\.[a-zA-Z0-9]{2,4})$
+RewriteCond %{REQUEST_URI} !(.*)/$
+RewriteRule ^(.*)$ %{REQUEST_URI}/ [L,R=301]
+
+# ===================================
+# 4. GLOBAL PAGE ROUTING
+# ===================================
+
+# 4.0 Root Handler
+RewriteRule ^$ /index.php [L]
+
+# 4.1 Clean URL Routing (maps slug/ to actual file relative to .htaccess folder)
+RewriteRule ^22-gruende/?$ /22-gruende.php [L,QSA]
+RewriteRule ^warum-es-funktioniert/?$ /warum-es-funktioniert.php [L,QSA]
+RewriteRule ^dein-fotograf/?$ /dein-fotograf.php [L,QSA]
+RewriteRule ^kontakt/?$ /kontakt.php [L,QSA]
+RewriteRule ^impressum/?$ /impressum.php [L,QSA]
+RewriteRule ^datenschutz/?$ /datenschutz.php [L,QSA]
+RewriteRule ^ratgeber/?$ /ratgeber.php [L,QSA]
+RewriteRule ^ratgeber/([^/]+)/?$ /ratgeber.php?slug=$1 [L,QSA]
+
+# ===================================
+# 5. SECURITY - Block Direct Access
+# ===================================
+
+# Block access to includes directory
+RewriteRule ^includes/ - [F,L]
+
+# Block access to hidden files (.git, .env, etc.)
+RewriteRule (^\.|/\.) - [F,L]
+
+# ===================================
+# 6. ASSET OPTIMIZATION
+# ===================================
+
+# 6.1 MIME TYPE DEFINITIONS
+<IfModule mod_mime.c>
+    AddType image/avif .avif
+    AddType image/webp .webp
+    AddType font/woff2 .woff2
+    AddType font/woff .woff
+</IfModule>
+
+# 6.2 BROWSER CACHING (mod_expires)
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresDefault "access plus 1 month"
+    ExpiresByType image/jpg "access plus 1 year"
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/webp "access plus 1 year"
+    ExpiresByType image/avif "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
+    ExpiresByType text/css "access plus 1 year"
+    ExpiresByType text/javascript "access plus 1 year"
+    ExpiresByType application/javascript "access plus 1 year"
+    ExpiresByType font/woff "access plus 1 year"
+    ExpiresByType font/woff2 "access plus 1 year"
+</IfModule>
+
+# 6.3 CACHE-CONTROL HEADERS (Fallback/Enforcement)
+<IfModule mod_headers.c>
+    # Images: 1 year cache
+    <FilesMatch "\.(jpg|jpeg|png|gif|webp|avif|svg|ico)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    # CSS/JS: 1 year cache
+    <FilesMatch "\.(css|js)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    # Fonts: 1 year cache
+    <FilesMatch "\.(woff|woff2|ttf|otf|eot)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
+
+# 6.4 Gzip Compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/css
+    AddOutputFilterByType DEFLATE text/javascript application/javascript
+    AddOutputFilterByType DEFLATE application/json
+    AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>

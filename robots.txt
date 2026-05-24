@@ -1,0 +1,43 @@
+User-agent: *
+Disallow: /includes/
+Allow: /
+
+# Sitemap Location
+Sitemap: https://matchmaker-frankfurt.de/sitemap.xml
+
+# --- AI BOT RULES ---
+# Full access for all AI web crawlers to maximize search visibility in AI search summaries
+# llms.txt provides structured developer context for AI models
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
