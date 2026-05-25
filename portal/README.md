@@ -25,6 +25,20 @@ Dann öffnen: `http://127.0.0.1:3100`
 
 Die Supabase-Dateien liegen bewusst im Repo-Root unter `supabase/`.
 
+### Option A: GitHub Action
+
+Diese Variante ist im Repository vorbereitet und braucht keine Supabase-Dashboard-Integration.
+Lege in GitHub unter `Settings` -> `Secrets and variables` -> `Actions` diese Secrets an:
+
+- `SUPABASE_ACCESS_TOKEN`
+- `SUPABASE_PROJECT_REF` = `nuvtwecvafvexhqaygtb`
+- `SUPABASE_DB_PASSWORD`
+
+Die Action prueft Migrationen bei Pull Requests per Dry-Run und pusht Migrationen automatisch,
+wenn `supabase/**` auf `main` geaendert wird.
+
+### Option B: Supabase Dashboard Integration
+
 Im Supabase Dashboard:
 
 1. `Project Settings` -> `Integrations` -> `GitHub Integration`
