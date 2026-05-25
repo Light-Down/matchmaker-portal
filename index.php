@@ -1,6 +1,7 @@
 <?php
 $page_title = "Matchmaker Frankfurt - Focus Rebound";
-$meta_description = "Hör auf unsichtbar zu sein auf Tinder. Professionelle Fotos für dein Dating-Profil.";
+$meta_description = "Hör auf, unsichtbar zu sein auf Tinder, Bumble & Hinge. Professionelle Dating-Fotos in Frankfurt für mehr Matches und echten Erfolg bei Dates.";
+$preload_hero_image = "assets/images/portrait-after.webp";
 include 'includes/header.php';
 ?>
 
@@ -9,7 +10,7 @@ include 'includes/header.php';
     <!-- Fallback Blobs (for noscript / WebGL fallback) -->
     <div id="hero-fallback-blobs" class="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
         <div class="absolute top-0 left-1/4 w-80 h-80 bg-red-600/20 rounded-full blur-[80px] animate-blob mix-blend-screen"></div>
-        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-900/20 rounded-full blur-[100px] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-0 right-0 w-96 h-96 bg-purple-900/20 rounded-full blur-[100px] animate-blob animation-delay-2s"></div>
     </div>
     <!-- WebGL Hero Canvas -->
     <canvas id="hero-canvas" class="absolute inset-0 w-full h-full -z-10 opacity-0 transition-opacity duration-1000 pointer-events-none"></canvas>
@@ -46,7 +47,7 @@ include 'includes/header.php';
 
             <div class="hero-mobile-video lg:hidden mb-8" aria-label="Video: So läuft dein Foto-Walk ab">
                 <div class="hero-video-frame hero-video-frame-mobile">
-                    <img class="hero-video" src="<?php echo asset_url('assets/images/portrait-after.png'); ?>" alt="Portrait-Beispiel aus einem Matchmaker Frankfurt Foto-Walk">
+                    <img class="hero-video" src="<?php echo asset_url('assets/images/portrait-after.webp'); ?>" width="1024" height="1024" fetchpriority="high" alt="Portrait-Beispiel aus einem Matchmaker Frankfurt Foto-Walk">
                     <div class="hero-video-overlay pointer-events-none">
                         <div class="hero-play-button">
                             <i data-lucide="play" class="w-6 h-6 fill-current"></i>
@@ -96,7 +97,7 @@ include 'includes/header.php';
         <!-- Hero Video Slot -->
         <aside class="hero-video-shell hidden lg:block trigger-elem scroll-fade-up delay-200" aria-label="Video: So läuft dein Foto-Walk ab">
             <div class="hero-video-frame">
-                <img class="hero-video" src="<?php echo asset_url('assets/images/portrait-after.png'); ?>" alt="Portrait-Beispiel aus einem Matchmaker Frankfurt Foto-Walk">
+                <img class="hero-video" src="<?php echo asset_url('assets/images/portrait-after.webp'); ?>" width="1024" height="1024" fetchpriority="high" alt="Portrait-Beispiel aus einem Matchmaker Frankfurt Foto-Walk">
                 <div class="hero-video-overlay pointer-events-none">
                     <div class="hero-play-button">
                         <i data-lucide="play" class="w-7 h-7 fill-current"></i>
@@ -257,11 +258,6 @@ include 'includes/header.php';
 <!-- SECTION: WINGMAN (Atmosphere Variant) -->
 <section id="wingman" class="relative py-32 overflow-hidden bg-[#050505]">
 
-    <!-- Glowing Orbs (Slower Pulse) -->
-    <div class="glow-blob bg-[#FD297B] w-[500px] h-[500px] top-1/4 left-[-100px] mix-blend-screen"></div>
-    <div class="glow-blob bg-[#FF655B] w-[400px] h-[400px] bottom-1/4 right-[-50px] mix-blend-screen"
-        style="animation-delay: 2s;"></div>
-
     <div class="container mx-auto px-6 relative z-10">
 
         <!-- Central Layout: Header -->
@@ -382,26 +378,26 @@ include 'includes/header.php';
 <!-- SECTION: PLAN (Number Focus) -->
 <section id="plan" class="relative py-32 bg-black overflow-hidden border-b border-white/10">
     <div class="container mx-auto px-6 relative z-10">
-        <div class="max-w-4xl mx-auto">
+        <div class="max-w-5xl mx-auto">
             <h2
-                class="text-4xl md:text-6xl font-black tracking-tighter mb-32 text-center trigger-elem scroll-fade-up uppercase">
+                class="text-4xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-32 text-center trigger-elem scroll-fade-up uppercase">
                 In 3 Schritten zu <br><span class="text-gradient">mehr Erfolg</span>
             </h2>
 
             <div class="space-y-48">
                 <!-- Step 1 -->
-                <div class="relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group">
+                <div class="plan-step relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group trigger-elem scroll-fade-up">
                     <div
-                        class="absolute -top-20 -left-6 md:-top-24 md:-left-10 text-[10rem] md:text-[20rem] font-black text-white/[0.05] leading-none select-none pointer-events-none trigger-elem scroll-fade-up group-hover:text-red-500/10 transition-colors duration-1000">
+                        class="plan-step-number plan-step-number-red absolute -top-20 -left-6 md:-top-24 md:-left-10 text-[10rem] md:text-[22rem] lg:text-[24rem] font-black leading-none select-none pointer-events-none">
                         01</div>
-                    <div class="md:col-span-7 trigger-elem scroll-fade-up relative z-10">
+                    <div class="md:col-span-8 relative z-10">
                         <div
-                            class="inline-block px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs font-bold uppercase tracking-widest mb-4">
+                            class="inline-block px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-500 text-xs md:text-sm font-bold uppercase tracking-widest mb-4">
                             Der Start</div>
                         <h3
-                            class="text-4xl md:text-5xl font-bold mb-6 text-white group-hover:translate-x-2 transition-transform duration-500">
+                            class="plan-step-title plan-step-title-right text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
                             Paket buchen</h3>
-                        <p class="text-gray-400 text-xl leading-relaxed">
+                        <p class="text-gray-400 text-xl md:text-2xl leading-relaxed">
                             Wähle das Fotoshooting-Paket, das am besten zu dir passt, und sichere dir deinen Slot bequem
                             online.
                         </p>
@@ -409,19 +405,19 @@ include 'includes/header.php';
                 </div>
 
                 <!-- Step 2 -->
-                <div class="relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group">
+                <div class="plan-step relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group trigger-elem scroll-fade-up">
                     <div class="md:col-span-12">
                         <div
-                            class="absolute -top-20 -right-6 md:-top-24 md:-right-10 text-[10rem] md:text-[20rem] font-black text-white/[0.05] leading-none select-none pointer-events-none trigger-elem scroll-fade-up group-hover:text-pink-500/10 transition-colors duration-1000 text-right w-full">
+                            class="plan-step-number plan-step-number-pink absolute -top-20 -right-6 md:-top-24 md:-right-10 text-[10rem] md:text-[22rem] lg:text-[24rem] font-black leading-none select-none pointer-events-none text-right w-full">
                             02</div>
-                        <div class="md:w-7/12 ml-auto trigger-elem scroll-fade-up text-right relative z-10">
+                        <div class="md:w-8/12 ml-auto text-right relative z-10">
                             <div
-                                class="inline-block px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-500 text-xs font-bold uppercase tracking-widest mb-4">
+                                class="inline-block px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-500 text-xs md:text-sm font-bold uppercase tracking-widest mb-4">
                                 Das Erlebnis</div>
                             <h3
-                                class="text-4xl md:text-5xl font-bold mb-6 text-white group-hover:-translate-x-2 transition-transform duration-500">
+                                class="plan-step-title plan-step-title-left text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
                                 Foto-Walk</h3>
-                            <p class="text-gray-400 text-xl leading-relaxed">
+                            <p class="text-gray-400 text-xl md:text-2xl leading-relaxed">
                                 Wir treffen uns in Frankfurt für einen entspannten Spaziergang. Keine steifen Posen,
                                 wir fangen deine Persönlichkeit authentisch ein.
                             </p>
@@ -430,18 +426,18 @@ include 'includes/header.php';
                 </div>
 
                 <!-- Step 3 -->
-                <div class="relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group">
+                <div class="plan-step relative grid grid-cols-1 md:grid-cols-12 items-center gap-12 group trigger-elem scroll-fade-up">
                     <div
-                        class="absolute -top-20 -left-6 md:-top-24 md:-left-10 text-[10rem] md:text-[20rem] font-black text-white/[0.05] leading-none select-none pointer-events-none trigger-elem scroll-fade-up group-hover:text-orange-500/10 transition-colors duration-1000">
+                        class="plan-step-number plan-step-number-orange absolute -top-20 -left-6 md:-top-24 md:-left-10 text-[10rem] md:text-[22rem] lg:text-[24rem] font-black leading-none select-none pointer-events-none">
                         03</div>
-                    <div class="md:col-span-7 trigger-elem scroll-fade-up relative z-10">
+                    <div class="md:col-span-8 relative z-10">
                         <div
-                            class="inline-block px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs font-bold uppercase tracking-widest mb-4">
+                            class="inline-block px-3 py-1 rounded-full bg-orange-500/10 border border-orange-500/20 text-orange-500 text-xs md:text-sm font-bold uppercase tracking-widest mb-4">
                             Das Resultat</div>
                         <h3
-                            class="text-4xl md:text-5xl font-bold mb-6 text-white group-hover:translate-x-2 transition-transform duration-500">
+                            class="plan-step-title plan-step-title-right text-4xl md:text-6xl lg:text-7xl font-bold mb-6 text-white">
                             Matches genießen</h3>
-                        <p class="text-gray-400 text-xl leading-relaxed">
+                        <p class="text-gray-400 text-xl md:text-2xl leading-relaxed">
                             Du erhältst deine optimierten Fotos innerhalb von 48 Stunden. Bereit, um auf Tinder, Bumble
                             & Co. endlich sichtbar zu werden.
                         </p>
@@ -468,7 +464,7 @@ include 'includes/header.php';
 </section>
 
 <!-- SECTION: SUCCESS (The GSAP Transformation) -->
-<section id="success" class="relative bg-black overflow-hidden border-t border-white/5">
+<section id="success" class="relative bg-black border-t border-white/5">
     <!-- Section Header (Sticky) -->
     <div class="pt-32 pb-16 container mx-auto px-6 relative z-30 pointer-events-none">
         <div class="text-center">
@@ -483,27 +479,23 @@ include 'includes/header.php';
     </div>
 
     <!-- GSAP Reveal Container -->
-    <div class="reveal-section relative">
+    <div class="reveal-section relative min-h-[220dvh] md:min-h-[240dvh]">
         <div
-            class="reveal-container min-h-[100dvh] w-full flex items-center justify-center p-6 md:p-12 overflow-hidden bg-black">
+            class="reveal-container sticky top-0 min-h-[100dvh] w-full flex items-center justify-center p-6 md:p-12 overflow-hidden bg-black">
 
             <div
-                class="relative w-full max-w-6xl aspect-[4/5] md:aspect-[21/9] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-[0_0_100px_rgba(220,38,38,0.15)]">
+                class="relative w-full max-w-5xl aspect-[4/5] md:aspect-[4/3] lg:aspect-[3/2] rounded-[2rem] md:rounded-[3rem] overflow-hidden bg-[#0a0a0a] border border-white/10 shadow-[0_0_100px_rgba(220,38,38,0.15)]">
 
-                <!-- WebGL Reveal Canvas -->
-                <canvas id="reveal-canvas" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500 z-0 pointer-events-none"></canvas>
-
-                <!-- Fallback Container (used if WebGL fails / is disabled) -->
                 <div id="reveal-fallback-container" class="absolute inset-0 z-0">
                     <!-- AFTER IMAGE (The Target) -->
                     <div class="absolute inset-0">
-                        <img src="assets/images/portrait-after.png" alt="Nachher: Match-Magnet"
+                        <img src="<?php echo asset_url('assets/images/portrait-after.webp'); ?>" width="1024" height="1024" loading="lazy" alt="Nachher: Match-Magnet"
                             class="w-full h-full object-cover">
                     </div>
 
                     <!-- BEFORE IMAGE (The Overlay that wipes) -->
                     <div id="reveal-before-box" class="absolute inset-0 z-10 overflow-hidden bg-[#050505]">
-                        <img src="assets/images/portrait-before.png" alt="Vorher: Unsichtbar"
+                        <img src="<?php echo asset_url('assets/images/portrait-before.webp'); ?>" width="1024" height="1024" loading="lazy" alt="Vorher: Unsichtbar"
                             class="w-full h-full object-cover grayscale opacity-70">
                         
                         <!-- Divider Line -->
@@ -545,7 +537,7 @@ include 'includes/header.php';
     </div>
 
     <!-- Final Phrase after Reveal -->
-    <div class="pb-32 container mx-auto px-6 text-center relative z-20 -mt-20">
+    <div class="pb-32 pt-8 container mx-auto px-6 text-center relative z-20">
         <h3 class="text-3xl md:text-5xl font-bold mb-12 text-white">Bist du bereit für diesen Schritt?</h3>
         <a href="<?php echo $base_dir; ?>/kontakt/"
             class="group relative inline-flex items-center justify-center px-16 py-8 font-black text-xl text-white transition-all duration-300">
@@ -564,7 +556,7 @@ include 'includes/header.php';
 </section>
 
 <!-- SECTION: PRICING (Direct CTA) -->
-<section id="pricing" class="relative py-32 bg-black overflow-hidden border-t border-white/5">
+<section id="pricing" class="pattern-section relative py-32 bg-black overflow-hidden border-t border-white/5">
 
     <!-- Halo Glow Element (Scrolltelling) -->
     <div id="pricing-halo" class="halo-glow bg-red-600/20"></div>
@@ -583,7 +575,7 @@ include 'includes/header.php';
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto items-stretch">
 
             <!-- Tier 1: Essential -->
-            <div class="pricing-card focus-card rounded-[2.5rem] p-10 flex flex-col trigger-elem scroll-fade-up group"
+            <div class="pricing-card pricing-card-surface focus-card rounded-[2.5rem] p-10 flex flex-col trigger-elem scroll-fade-up group"
                 data-tier="essential">
                 <div class="tier-icon-container">
                     <i data-lucide="camera" class="w-8 h-8 text-gray-400"></i>
@@ -622,7 +614,7 @@ include 'includes/header.php';
                     class="absolute -inset-[2px] bg-gradient-to-r from-red-600 to-pink-600 rounded-[2.5rem] blur-sm opacity-50">
                 </div>
                 <div
-                    class="relative h-full bg-[#0a0a0a] rounded-[2.5rem] p-10 flex flex-col border border-white/10 shadow-[0_0_80px_rgba(220,38,38,0.1)]">
+                    class="pricing-card-surface relative h-full bg-[#0a0a0a] rounded-[2.5rem] p-10 flex flex-col border border-white/10 shadow-[0_0_80px_rgba(220,38,38,0.1)]">
                     <div class="absolute -top-4 left-1/2 -translate-x-1/2">
                         <span class="pricing-badge badge-magnet">Bestseller</span>
                     </div>
@@ -664,7 +656,7 @@ include 'includes/header.php';
             </div>
 
             <!-- Tier 3: The Wingman -->
-            <div class="pricing-card focus-card rounded-[2.5rem] p-10 flex flex-col trigger-elem scroll-fade-up delay-400 group"
+            <div class="pricing-card pricing-card-surface focus-card rounded-[2.5rem] p-10 flex flex-col trigger-elem scroll-fade-up delay-400 group"
                 data-tier="wingman">
                 <div class="tier-icon-container bg-sky-500/10 border-sky-500/20 group-hover:bg-sky-500/20">
                     <i data-lucide="gem" class="w-8 h-8 text-sky-400"></i>
@@ -703,205 +695,121 @@ include 'includes/header.php';
 
         </div>
     </div>
+    <div class="pricing-edge-glow" aria-hidden="true"></div>
 </section>
 
-<style>
-    .text-gradient-blue {
-        background: linear-gradient(to right, #0ea5e9, #2dd4bf);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-</style>
-
-<script>
-    // PRICING HALO GLOW LOGIC
-    document.addEventListener('DOMContentLoaded', () => {
-        const halo = document.getElementById('pricing-halo');
-        const cards = document.querySelectorAll('.pricing-card');
-        const pricingSection = document.getElementById('pricing');
-
-        const tierColors = {
-            essential: 'rgba(255, 255, 255, 0.15)',
-            magnet: 'rgba(239, 68, 68, 0.25)',
-            wingman: 'rgba(14, 165, 233, 0.25)'
-        };
-
-        const updateHalo = () => {
-            let activeCard = null;
-            const viewportCenter = window.innerHeight / 2;
-
-            cards.forEach(card => {
-                const rect = card.getBoundingClientRect();
-                const cardCenter = rect.top + rect.height / 2;
-
-                // If the card is in the center-ish of the viewport
-                if (rect.top < window.innerHeight && rect.bottom > 0) {
-                    if (!activeCard || Math.abs(cardCenter - viewportCenter) < Math.abs(activeCard.center - viewportCenter)) {
-                        activeCard = { el: card, center: cardCenter, rect };
-                    }
-                }
-            });
-
-            if (activeCard && activeCard.el.classList.contains('in-view')) {
-                const tier = activeCard.el.dataset.tier;
-                const sectionRect = pricingSection.getBoundingClientRect();
-
-                // Position relative to section
-                const x = activeCard.rect.left + activeCard.rect.width / 2 - sectionRect.left;
-                const y = activeCard.rect.top + activeCard.rect.height / 2 - sectionRect.top;
-
-                halo.style.left = `${x}px`;
-                halo.style.top = `${y}px`;
-                halo.style.backgroundColor = tierColors[tier];
-                halo.style.opacity = '1';
-                halo.style.boxShadow = `0 0 100px 50px ${tierColors[tier]}`;
-            } else {
-                halo.style.opacity = '0';
-            }
-        };
-
-        window.addEventListener('scroll', updateHalo);
-        window.addEventListener('resize', updateHalo);
-        // Initial call
-        setTimeout(updateHalo, 500);
-    });
-</script>
-
-<!-- SECTION: TINDER SWIPER (Mistakes vs Solutions) -->
+<!-- SECTION: TINDER SWIPER (Profile Quiz) -->
 <section id="swiper-section" class="relative py-32 bg-[#050505] overflow-hidden border-t border-white/5">
-    <div class="glow-blob bg-red-600/10 w-[400px] h-[400px] top-1/3 left-[-200px] mix-blend-screen"></div>
-    <div class="glow-blob bg-pink-600/10 w-[400px] h-[400px] bottom-1/3 right-[-200px] mix-blend-screen"></div>
     <div class="container mx-auto px-6 relative z-10">
         <div class="max-w-3xl mx-auto text-center mb-16 trigger-elem scroll-fade-up">
             <span class="text-xs font-mono text-red-500 uppercase tracking-widest block mb-4">Profil-Check</span>
             <h2 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-6 text-white">
-                Swipe Left oder <span class="text-gradient">Right?</span>
+                Wie gut liest du <span class="text-gradient">Dating-Fotos?</span>
             </h2>
             <p class="text-gray-400 text-xl max-w-2xl mx-auto leading-relaxed">
-                Klicke oder wische die Karten, um die häufigsten Profil-Fehler von Männern und die MatchMaker-Lösung zu sehen.
+                Swipe nach links für Nein, nach rechts für Ja. Am Ende bekommst du eine kurze Einschätzung für dein Profil-Gespür.
             </p>
         </div>
 
         <!-- Swiper Container -->
-        <div class="swiper-wrapper mb-12 trigger-elem scroll-fade-up">
+        <div class="swiper-wrapper trigger-elem scroll-fade-up">
             
             <!-- Final Card (Behind everything) -->
-            <div class="swiper-card swiper-final-card text-center justify-center items-center bg-[#0a0a0c] border-red-500/20">
-                <i data-lucide="sparkles" class="w-16 h-16 text-red-500 mb-6 animate-pulse"></i>
-                <h3 class="text-3xl font-black text-white mb-4">DEIN UPGRADE WARTET</h3>
-                <p class="text-gray-400 text-sm max-w-sm mb-8 leading-relaxed">
-                    Schluss mit den Fehlern der Konkurrenz. Lass uns Bilder machen, die dich als deinen besten Fang zeigen.
+            <div class="swiper-card swiper-final-card quiz-result-card text-center justify-center items-center bg-[#0a0a0c] border-red-500/20">
+                <div class="w-20 h-20 rounded-full bg-gradient-to-br from-red-600 to-pink-600 flex items-center justify-center mb-6 shadow-[0_0_36px_rgba(220,38,38,0.28)]">
+                    <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
+                </div>
+                <div id="quiz-score-value" class="font-mono text-sm text-red-400 tracking-[0.35em] uppercase mb-4">0/5 Punkte</div>
+                <h3 id="quiz-result-title" class="text-3xl md:text-4xl font-black text-white mb-4 tracking-tight">Dein Blick wird schärfer.</h3>
+                <p id="quiz-result-copy" class="text-gray-400 text-sm md:text-base max-w-md mb-8 leading-relaxed">
+                    Spiele die Karten durch und du bekommst eine Einschätzung, wie klar du Profilbilder einschätzt.
                 </p>
-                <a href="<?php echo $base_dir; ?>/kontakt/" class="px-8 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold rounded-full shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:scale-105 transition-transform">
-                    Foto-Walk anfragen
-                </a>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <button id="quiz-restart" class="px-7 py-4 rounded-full bg-white/5 border border-white/10 text-white font-bold hover:bg-white/10 transition-colors">
+                        Nochmal spielen
+                    </button>
+                    <a href="<?php echo $base_dir; ?>/kontakt/" class="px-7 py-4 bg-gradient-to-r from-red-600 to-pink-600 text-white font-bold rounded-full shadow-[0_0_20px_rgba(220,38,38,0.3)] hover:scale-105 transition-transform">
+                        Kontakt aufnehmen
+                    </a>
+                </div>
             </div>
 
-            <!-- Card 3 -->
-            <div class="swiper-card">
+            <!-- Question 5 -->
+            <div class="swiper-card quiz-card" data-correct="left">
                 <div>
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-mono text-gray-500">Dating-Fehler #3</span>
-                        <span class="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase">Verstecken</span>
+                        <span class="text-xs font-mono text-gray-500">Frage 5/5</span>
+                        <span class="quiz-difficulty">Sequenz</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Das Sonnenbrillen- & Autospiegelbild</h3>
+                    <h3 class="text-2xl md:text-3xl font-black text-white leading-tight mb-5">Drei fast gleiche Portraits in verschiedenen Outfits fühlen sich abwechslungsreicher an als ein Mix aus Portrait, Bewegung und Umfeld.</h3>
+                    <p class="text-gray-400 leading-relaxed">Entscheidend ist nicht nur, dass du anders angezogen bist. Das Profil muss mehrere Seiten von dir zeigen.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow items-center">
-                    <div class="bg-red-950/20 border border-red-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-red-500 font-bold text-sm">
-                            <i data-lucide="x-circle" class="w-5 h-5"></i>
-                            <span>SWIPE LEFT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Sonnenbrillen verbergen deine Augen, das wichtigste Merkmal für Vertrauensbildung. Autospiegelbilder wirken unpersönlich, faul und oft veraltet.
-                        </p>
-                    </div>
-                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-emerald-500 font-bold text-sm">
-                            <i data-lucide="check-circle" class="w-5 h-5"></i>
-                            <span>SWIPE RIGHT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Der offene, lachende Blickkontakt direkt in die Linse. Wirkt selbstbewusst, sympathisch und extrem einladend für eine erste Nachricht.
-                        </p>
-                    </div>
-                </div>
-                <div class="text-xs text-gray-500 font-mono mt-4">Tippe auf die Buttons unten zum Wischen</div>
+                <div class="quiz-note">Besser: ein klares Hauptbild, ein Bild in Bewegung, ein Kontextbild und ein ruhiger Close-up-Moment.</div>
             </div>
 
-            <!-- Card 2 -->
-            <div class="swiper-card">
+            <!-- Question 4 -->
+            <div class="swiper-card quiz-card" data-correct="right">
                 <div>
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-mono text-gray-500">Dating-Fehler #2</span>
-                        <span class="px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/20 text-pink-400 text-[10px] font-bold uppercase">Das Suchspiel</span>
+                        <span class="text-xs font-mono text-gray-500">Frage 4/5</span>
+                        <span class="quiz-difficulty">Kontext</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Das Kumpel-Gruppenfoto</h3>
+                    <h3 class="text-2xl md:text-3xl font-black text-white leading-tight mb-5">Ein Bild, auf dem du nicht komplett zu sehen bist, kann trotzdem stark sein, wenn Stimmung und Kontext klar sind.</h3>
+                    <p class="text-gray-400 leading-relaxed">Nicht jedes gute Dating-Foto muss ein Ganzkörperbild sein. Nähe, Licht und Situation können mehr erzählen als volle Sichtbarkeit.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow items-center">
-                    <div class="bg-red-950/20 border border-red-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-red-500 font-bold text-sm">
-                            <i data-lucide="x-circle" class="w-5 h-5"></i>
-                            <span>SWIPE LEFT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Frauen wollen nicht detektivisch raten, wer du bist. Wenn sie auf deinem ersten Bild drei andere Männer sieht, wischt sie genervt nach links.
-                        </p>
-                    </div>
-                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-emerald-500 font-bold text-sm">
-                            <i data-lucide="check-circle" class="w-5 h-5"></i>
-                            <span>SWIPE RIGHT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Ein klares Einzelportrait mit professioneller Tiefenunschärfe (Bokeh-Effekt). Du stehst im Fokus, während der Hintergrund ästhetisch verschwimmt.
-                        </p>
-                    </div>
-                </div>
-                <div class="text-xs text-gray-500 font-mono mt-4">Tippe auf die Buttons unten zum Wischen</div>
+                <div class="quiz-note">Stark, wenn das Bild eine Szene trägt: Bar, Straße, Licht, Bewegung oder ein Moment, der echt wirkt.</div>
             </div>
 
-            <!-- Card 1 -->
-            <div class="swiper-card">
+            <!-- Question 3 -->
+            <div class="swiper-card quiz-card" data-correct="left">
                 <div>
                     <div class="flex justify-between items-center mb-4">
-                        <span class="text-xs font-mono text-gray-500">Dating-Fehler #1</span>
-                        <span class="px-3 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 text-[10px] font-bold uppercase">Klassiker</span>
+                        <span class="text-xs font-mono text-gray-500">Frage 3/5</span>
+                        <span class="quiz-difficulty">Ausstrahlung</span>
                     </div>
-                    <h3 class="text-2xl font-bold text-white mb-6">Das Fitnessstudio-Spiegelselfie</h3>
+                    <h3 class="text-2xl md:text-3xl font-black text-white leading-tight mb-5">Wenn du auf jedem Bild direkt in die Kamera schaust, wirkt dein Profil automatisch vertrauenswürdiger.</h3>
+                    <p class="text-gray-400 leading-relaxed">Blickkontakt ist wichtig. Aber fünf direkte Kamera-Blicke hintereinander können schnell gestellt und kontrolliert wirken.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 flex-grow items-center">
-                    <div class="bg-red-950/20 border border-red-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-red-500 font-bold text-sm">
-                            <i data-lucide="x-circle" class="w-5 h-5"></i>
-                            <span>SWIPE LEFT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Wirkt oft angeberisch, einsam oder schlichtweg phantasielos. Die Badezimmerfliesen im Hintergrund ruinieren jeden Vibe. Der Algorithmus straft Selfies ab.
-                        </p>
+                <div class="quiz-note">Besser ist ein Mix: ein klarer Blick, ein natürlich beobachteter Moment, ein Bild mit Richtung und Energie.</div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="swiper-card quiz-card" data-correct="right">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-mono text-gray-500">Frage 2/5</span>
+                        <span class="quiz-difficulty">Echtheit</span>
                     </div>
-                    <div class="bg-emerald-950/20 border border-emerald-500/20 rounded-2xl p-5">
-                        <div class="flex items-center gap-2 mb-2 text-emerald-500 font-bold text-sm">
-                            <i data-lucide="check-circle" class="w-5 h-5"></i>
-                            <span>SWIPE RIGHT</span>
-                        </div>
-                        <p class="text-sm text-gray-400 leading-relaxed">
-                            Ein lässiges, ungestelltes Bild in Bewegung vor urbaner Kulisse oder im Szene-Café. Zeigt Lifestyle, Fitness und soziale Kompetenz, völlig mühelos.
-                        </p>
-                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-white leading-tight mb-5">Ein leicht unperfektes Foto mit echter Energie kann stärker sein als ein technisch perfektes Bild ohne Ausstrahlung.</h3>
+                    <p class="text-gray-400 leading-relaxed">Dating-Apps belohnen nicht sterile Perfektion, sondern einen Moment, der neugierig macht.</p>
                 </div>
-                <div class="text-xs text-gray-500 font-mono mt-4">Tippe auf die Buttons unten zum Wischen</div>
+                <div class="quiz-note">Die Kunst ist, echte Wirkung professionell aussehen zu lassen, ohne dass sie nach Studio riecht.</div>
+            </div>
+
+            <!-- Question 1 -->
+            <div class="swiper-card quiz-card" data-correct="left">
+                <div>
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="text-xs font-mono text-gray-500">Frage 1/5</span>
+                        <span class="quiz-difficulty">Erstes Bild</span>
+                    </div>
+                    <h3 class="text-2xl md:text-3xl font-black text-white leading-tight mb-5">Ein Gruppenfoto als erstes Bild zeigt sozialen Status und verbessert deine Chancen.</h3>
+                    <p class="text-gray-400 leading-relaxed">Sozialer Kontext kann helfen, aber das erste Bild muss sofort klären, wer du bist und warum man hängenbleibt.</p>
+                </div>
+                <div class="quiz-note">Als erstes Bild ist Klarheit stärker als Suchspiel. Gruppenbilder gehören, wenn überhaupt, weiter nach hinten.</div>
             </div>
 
         </div>
 
         <!-- Swiper Controls -->
-        <div class="flex justify-center gap-6 trigger-elem scroll-fade-up">
-            <button id="swiper-dislike" class="swiper-btn swiper-btn-dislike" aria-label="Dislike / Swipe Left">
+        <div class="swiper-controls flex justify-center gap-5 md:gap-6 trigger-elem scroll-fade-up">
+            <button id="swiper-dislike" class="swiper-btn swiper-btn-dislike" aria-label="Nein / Swipe Left">
                 <i data-lucide="x" class="w-8 h-8"></i>
+                <span>Nein</span>
             </button>
-            <button id="swiper-like" class="swiper-btn swiper-btn-like" aria-label="Like / Swipe Right">
-                <i data-lucide="heart" class="w-8 h-8"></i>
+            <button id="swiper-like" class="swiper-btn swiper-btn-like" aria-label="Ja / Swipe Right">
+                <i data-lucide="check" class="w-8 h-8"></i>
+                <span>Ja</span>
             </button>
         </div>
     </div>
@@ -909,8 +817,6 @@ include 'includes/header.php';
 
 <!-- SECTION: BRAND MANIFESTO (SB7 Identity & Values) -->
 <section id="manifesto" class="relative py-32 bg-black overflow-hidden border-t border-white/5">
-    <!-- WebGL Manifesto Canvas -->
-    <canvas id="manifesto-canvas" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 pointer-events-none z-0"></canvas>
     <!-- Fallback gradient -->
     <div id="manifesto-fallback" class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(220,38,38,0.05)_0%,transparent_60%)] pointer-events-none z-0"></div>
     <div class="container mx-auto px-6 relative z-10 max-w-5xl">
@@ -1118,8 +1024,6 @@ include 'includes/header.php';
 
 <!-- SECTION: FINAL CALL TO ACTION (SB7 Resolution & Success) -->
 <section id="final-cta" class="relative py-32 bg-black overflow-hidden border-t border-white/5">
-    <!-- WebGL CTA Canvas -->
-    <canvas id="cta-canvas" class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-1000 pointer-events-none z-0"></canvas>
     <!-- Fallback background blob -->
     <div id="final-cta-fallback" class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-red-600/10 rounded-full blur-[120px] pointer-events-none z-0"></div>
     <div class="container mx-auto px-6 relative z-10 max-w-4xl text-center">

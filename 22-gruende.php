@@ -4,30 +4,6 @@ $meta_description = "Erfahre die 22 wissenschaftlichen und psychologischen Grün
 include 'includes/header.php';
 ?>
 
-<!-- Custom CSS for Bento Grid Enhancements & Breaks -->
-<style>
-    .bento-card-gradient-red {
-        background: linear-gradient(135deg, rgba(220, 38, 38, 0.07) 0%, rgba(0, 0, 0, 0.6) 100%);
-        border: 1px solid rgba(220, 38, 38, 0.15) !important;
-    }
-    .bento-card-gradient-pink {
-        background: linear-gradient(135deg, rgba(219, 39, 119, 0.07) 0%, rgba(0, 0, 0, 0.6) 100%);
-        border: 1px solid rgba(219, 39, 119, 0.15) !important;
-    }
-    .break-section {
-        background: radial-gradient(circle at center, rgba(220, 38, 38, 0.05) 0%, rgba(0,0,0,0) 70%), #030303;
-        border-top: 1px solid rgba(255, 255, 255, 0.03);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-    }
-    .tier-row {
-        transition: all 0.3s ease;
-    }
-    .tier-row:hover {
-        background: rgba(255, 255, 255, 0.03);
-        transform: translateX(4px);
-    }
-</style>
-
 <!-- Hero Section -->
 <section class="relative pt-40 pb-20 overflow-hidden bg-black">
     <div class="glow-blob bg-red-600/10 w-[500px] h-[500px] top-[-100px] right-[-100px] mix-blend-screen"></div>

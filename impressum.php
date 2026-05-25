@@ -1,6 +1,6 @@
 <?php
 $page_title = "Impressum";
-$meta_description = "Impressum und rechtliche Hinweise von MatchMaker Frankfurt.";
+$meta_description = "Impressum und rechtliche Anbieterkennzeichnung für MatchMaker Frankfurt. Erfahre mehr über die gesetzlichen Hinweise und Kontaktmöglichkeiten.";
 $noindex = true;
 include 'includes/header.php';
 ?>

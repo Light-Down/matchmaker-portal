@@ -1,5 +1,5 @@
 <?php
-$page_title = "Jetzt Wingman anfragen";
+$page_title = "Dating-Fotoshooting Frankfurt: Wingman";
 $meta_description = "Nimm Kontakt mit uns auf. Wähle dein Wunsch-Paket und sichere dir ein professionelles Dating-Fotoshooting in Frankfurt für mehr Matches.";
 include 'includes/header.php';
 

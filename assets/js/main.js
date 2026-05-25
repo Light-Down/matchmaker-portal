@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const assetScript = document.getElementById('matchmaker-main');
+    const runtimeAssets = {
+        three: assetScript?.dataset.three,
+        gsap: assetScript?.dataset.gsap,
+        scrollTrigger: assetScript?.dataset.scrollTrigger,
+        portraitBefore: assetScript?.dataset.portraitBefore || 'assets/images/portrait-before.webp',
+        portraitAfter: assetScript?.dataset.portraitAfter || 'assets/images/portrait-after.webp'
+    };
+
     if (window.lucide) {
         lucide.createIcons();
     }
@@ -95,12 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!canvas) return;
 
         const container = canvas.parentElement;
-        let width = container.clientWidth;
-        let height = container.clientHeight;
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(width, height);
+        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
         const scene = new THREE.Scene();
         const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
@@ -111,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
             uMouse: { value: new THREE.Vector2(0.5, 0.5) },
             uTargetMouse: { value: new THREE.Vector2(0.5, 0.5) },
             uScrollSpeed: { value: 0 },
-            uResolution: { value: new THREE.Vector2(width, height) }
+            uResolution: { value: new THREE.Vector2(1, 1) }
         };
 
         const material = new THREE.ShaderMaterial({
@@ -235,22 +240,32 @@ document.addEventListener('DOMContentLoaded', () => {
             lastScrollY = currentScrollY;
         });
 
-        // Resize handler
-        window.addEventListener('resize', () => {
-            width = container.clientWidth;
-            height = container.clientHeight;
-            renderer.setSize(width, height);
-            uniforms.uResolution.value.set(width, height);
+        // Use ResizeObserver instead of clientWidth/clientHeight queries to prevent forced synchronous reflow (layout thrashing)
+        const resizeObserver = new ResizeObserver((entries) => {
+            if (!entries || entries.length === 0) return;
+            const entry = entries[0];
+            const w = entry.contentRect.width || 100;
+            const h = entry.contentRect.height || 100;
+            renderer.setSize(w, h);
+            uniforms.uResolution.value.set(w, h);
         });
+        resizeObserver.observe(container);
 
         // Transition opacity
         canvas.style.opacity = '1';
         const fallback = document.getElementById('hero-fallback-blobs');
         if (fallback) fallback.style.opacity = '0.15'; // dim fallback blobs
 
+        let isHeroVisible = true;
+        const heroVisibilityObserver = new IntersectionObserver((entries) => {
+            isHeroVisible = entries.some((entry) => entry.isIntersecting);
+        }, { threshold: 0.01 });
+        heroVisibilityObserver.observe(canvas);
+
         const clock = new THREE.Clock();
         function animate() {
             requestAnimationFrame(animate);
+            if (!isHeroVisible) return;
             uniforms.uMouse.value.lerp(uniforms.uTargetMouse.value, 0.05);
             uniforms.uScrollSpeed.value += (scrollSpeed - uniforms.uScrollSpeed.value) * 0.05;
             scrollSpeed *= 0.95;
@@ -260,408 +275,24 @@ document.addEventListener('DOMContentLoaded', () => {
         animate();
     }
 
-    // --- WEBGL METAMORPHOSE REVEAL SHADER ---
-    let useWebGLReveal = false;
-    let revealMaterial = null;
+    function loadScriptOnce(src) {
+        if (!src) return Promise.reject(new Error('Missing script URL'));
+        const existing = document.querySelector(`script[src="${src}"]`);
+        if (existing) return Promise.resolve();
 
-    function initRevealShader() {
-        const canvas = document.getElementById('reveal-canvas');
-        if (!canvas) return;
-
-        const container = canvas.parentElement;
-        const width = container.clientWidth;
-        const height = container.clientHeight;
-
-        const loader = new THREE.TextureLoader();
-        let loadedCount = 0;
-
-        function checkLoaded() {
-            loadedCount++;
-            if (loadedCount === 2) {
-                setupScene();
-            }
-        }
-
-        const beforeTexture = loader.load('assets/images/portrait-before.png', checkLoaded, undefined, () => {
-            console.warn("WebGL reveal before texture load failed.");
+        return new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = src;
+            script.async = true;
+            script.onload = resolve;
+            script.onerror = reject;
+            document.head.appendChild(script);
         });
-        const afterTexture = loader.load('assets/images/portrait-after.png', checkLoaded, undefined, () => {
-            console.warn("WebGL reveal after texture load failed.");
-        });
-
-        function setupScene() {
-            const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
-            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-            renderer.setSize(width, height);
-
-            const scene = new THREE.Scene();
-            const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-            const geometry = new THREE.PlaneGeometry(2, 2);
-
-            revealMaterial = new THREE.ShaderMaterial({
-                uniforms: {
-                    uTextureBefore: { value: beforeTexture },
-                    uTextureAfter: { value: afterTexture },
-                    uProgress: { value: 0.0 },
-                    uTime: { value: 0.0 },
-                    uResolution: { value: new THREE.Vector2(width, height) }
-                },
-                vertexShader: `
-                    varying vec2 vUv;
-                    void main() {
-                        vUv = uv;
-                        gl_Position = vec4(position, 1.0);
-                    }
-                `,
-                fragmentShader: `
-                    uniform sampler2D uTextureBefore;
-                    uniform sampler2D uTextureAfter;
-                    uniform float uProgress;
-                    uniform float uTime;
-                    uniform vec2 uResolution;
-                    varying vec2 vUv;
-
-                    void main() {
-                        vec2 uv = vUv;
-                        
-                        float progressFactor = sin(uProgress * 3.14159265);
-                        float wave = sin(uv.y * 12.0 + uTime * 2.0) * 0.035 * progressFactor;
-                        float wave2 = cos(uv.y * 30.0 - uTime * 1.5) * 0.015 * progressFactor;
-                        
-                        float edge = uProgress + wave + wave2;
-                        
-                        vec4 imgAfter = texture2D(uTextureAfter, uv);
-                        vec4 imgBefore = texture2D(uTextureBefore, uv);
-                        
-                        // Apply grayscale and lower opacity matching the original fallback style
-                        float gray = dot(imgBefore.rgb, vec3(0.299, 0.587, 0.114));
-                        imgBefore.rgb = vec3(gray) * 0.8;
-                        
-                        float mixVal = smoothstep(edge - 0.012, edge + 0.012, uv.x);
-                        vec4 color = mix(imgAfter, imgBefore, mixVal);
-                        
-                        // Liquid glow edge
-                        float borderGlow = smoothstep(0.015, 0.0, abs(uv.x - edge)) * progressFactor;
-                        vec3 glowColor = vec3(0.99, 0.16, 0.48) * borderGlow * 1.8;
-                        color.rgb += glowColor;
-                        
-                        gl_FragColor = color;
-                    }
-                `
-            });
-
-            const mesh = new THREE.Mesh(geometry, revealMaterial);
-            scene.add(mesh);
-
-            window.addEventListener('resize', () => {
-                const w = container.clientWidth;
-                const h = container.clientHeight;
-                renderer.setSize(w, h);
-                revealMaterial.uniforms.uResolution.value.set(w, h);
-            });
-
-            useWebGLReveal = true;
-
-            const fallback = document.getElementById('reveal-fallback-container');
-            if (fallback) fallback.style.opacity = '0';
-            canvas.style.opacity = '1';
-
-            const clock = new THREE.Clock();
-            function render() {
-                requestAnimationFrame(render);
-                revealMaterial.uniforms.uTime.value = clock.getElapsedTime();
-                renderer.render(scene, camera);
-            }
-            render();
-        }
     }
 
-    // --- WEBGL MANIFESTO SHADER ---
-    function initManifestoShader() {
-        const canvas = document.getElementById('manifesto-canvas');
-        if (!canvas) return;
+    function initGsapMotion() {
+        if (!window.gsap) return;
 
-        const container = canvas.parentElement;
-        let width = container.clientWidth;
-        let height = container.clientHeight;
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(width, height);
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const geometry = new THREE.PlaneGeometry(2, 2);
-
-        const uniforms = {
-            uTime: { value: 0 },
-            uResolution: { value: new THREE.Vector2(width, height) }
-        };
-
-        const material = new THREE.ShaderMaterial({
-            uniforms: uniforms,
-            vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 uResolution;
-                varying vec2 vUv;
-
-                float hash(vec2 p) {
-                    p = fract(p * vec2(123.34, 456.21));
-                    p += dot(p, p + 45.32);
-                    return fract(p.x * p.y);
-                }
-
-                float noise(vec2 p) {
-                    vec2 i = floor(p);
-                    vec2 f = fract(p);
-                    float a = hash(i);
-                    float b = hash(i + vec2(1.0, 0.0));
-                    float c = hash(i + vec2(0.0, 1.0));
-                    float d = hash(i + vec2(1.0, 1.0));
-                    vec2 u = f * f * (3.0 - 2.0 * f);
-                    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-                }
-
-                float fbm(vec2 p) {
-                    float v = 0.0;
-                    float a = 0.5;
-                    for (int i = 0; i < 3; ++i) {
-                        v += a * noise(p);
-                        p = p * 2.0 + vec2(10.0);
-                        a *= 0.5;
-                    }
-                    return v;
-                }
-
-                void main() {
-                    vec2 uv = vUv;
-                    vec2 st = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
-
-                    // Breathing scale
-                    float breathe = sin(uTime * 0.3) * 0.03 + 0.97;
-                    st *= breathe;
-
-                    // Flowing noise
-                    vec2 flow = vec2(uTime * 0.015, uTime * 0.01);
-                    float n = fbm(st * 2.0 + flow);
-
-                    // Radial center glow
-                    float dist = length(st);
-                    float radial = smoothstep(0.8, 0.0, dist);
-
-                    // Palette (Subtle/Dark Violet and Crimson tones for readability)
-                    vec3 colorBg = vec3(0.0, 0.0, 0.0); // True black
-                    vec3 colorViolet = vec3(0.06, 0.01, 0.12); // Extra subtle dark violet
-                    vec3 colorCrimson = vec3(0.35, 0.03, 0.10); // Subtle dark red/crimson
-
-                    vec3 color = mix(colorBg, colorViolet, radial * 0.6);
-                    color = mix(color, colorCrimson, n * radial * 0.4);
-
-                    // Edge fadeout (fade to black at top and bottom boundaries of the section)
-                    float edgeFade = smoothstep(0.0, 0.25, uv.y) * smoothstep(1.0, 0.75, uv.y);
-                    vec3 finalColor = mix(colorBg, color, edgeFade);
-
-                    gl_FragColor = vec4(finalColor, 1.0);
-                }
-            `
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            width = container.clientWidth;
-            height = container.clientHeight;
-            renderer.setSize(width, height);
-            uniforms.uResolution.value.set(width, height);
-        });
-
-        // Hide fallback & show canvas
-        canvas.style.opacity = '1';
-        const fallback = document.getElementById('manifesto-fallback');
-        if (fallback) fallback.style.opacity = '0';
-
-        const clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            uniforms.uTime.value = clock.getElapsedTime();
-            renderer.render(scene, camera);
-        }
-        animate();
-    }
-
-    // --- WEBGL FINAL CTA SHADER ---
-    function initCtaShader() {
-        const canvas = document.getElementById('cta-canvas');
-        if (!canvas) return;
-
-        const container = canvas.parentElement;
-        let width = container.clientWidth;
-        let height = container.clientHeight;
-
-        const renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-        renderer.setSize(width, height);
-
-        const scene = new THREE.Scene();
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
-        const geometry = new THREE.PlaneGeometry(2, 2);
-
-        const uniforms = {
-            uTime: { value: 0 },
-            uMouse: { value: new THREE.Vector2(0.5, 0.5) },
-            uTargetMouse: { value: new THREE.Vector2(0.5, 0.5) },
-            uResolution: { value: new THREE.Vector2(width, height) }
-        };
-
-        const material = new THREE.ShaderMaterial({
-            uniforms: uniforms,
-            vertexShader: `
-                varying vec2 vUv;
-                void main() {
-                    vUv = uv;
-                    gl_Position = vec4(position, 1.0);
-                }
-            `,
-            fragmentShader: `
-                uniform float uTime;
-                uniform vec2 uMouse;
-                uniform vec2 uResolution;
-                varying vec2 vUv;
-
-                float hash(vec2 p) {
-                    p = fract(p * vec2(123.34, 456.21));
-                    p += dot(p, p + 45.32);
-                    return fract(p.x * p.y);
-                }
-
-                float noise(vec2 p) {
-                    vec2 i = floor(p);
-                    vec2 f = fract(p);
-                    float a = hash(i);
-                    float b = hash(i + vec2(1.0, 0.0));
-                    float c = hash(i + vec2(0.0, 1.0));
-                    float d = hash(i + vec2(1.0, 1.0));
-                    vec2 u = f * f * (3.0 - 2.0 * f);
-                    return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-                }
-
-                float fbm(vec2 p) {
-                    float v = 0.0;
-                    float a = 0.5;
-                    for (int i = 0; i < 3; ++i) {
-                        v += a * noise(p);
-                        p = p * 2.0 + vec2(10.0);
-                        a *= 0.5;
-                    }
-                    return v;
-                }
-
-                void main() {
-                    vec2 uv = vUv;
-                    vec2 st = (uv - 0.5) * vec2(uResolution.x / uResolution.y, 1.0);
-
-                    // Mouse influence
-                    float mouseDist = distance(uv, uMouse);
-                    float mouseInfluence = smoothstep(0.4, 0.0, mouseDist);
-
-                    // Breathing scale
-                    float breathe = sin(uTime * 0.4) * 0.04 + 0.96;
-                    st *= breathe;
-
-                    // Flowing noise
-                    vec2 flow = vec2(uTime * 0.02, uTime * 0.015);
-                    float n = fbm(st * 2.5 + flow);
-
-                    // Radial center glow
-                    float dist = length(st);
-                    float radial = smoothstep(0.7, 0.0, dist);
-
-                    // Colors (Tinder tones but dark and warm)
-                    vec3 colorBg = vec3(0.0, 0.0, 0.0); // True black
-                    vec3 colorCrimson = vec3(0.45, 0.05, 0.12); // Warm crimson glow
-                    vec3 colorViolet = vec3(0.12, 0.01, 0.20); // Subdued violet
-
-                    vec3 color = mix(colorBg, colorViolet, radial * 0.7);
-                    color = mix(color, colorCrimson, n * radial * 0.6);
-
-                    // Interactive mouse ripple glow
-                    color += vec3(0.99, 0.16, 0.48) * mouseInfluence * 0.12;
-
-                    // Edge fadeout (blend seamlessly into black at top and bottom boundaries of the section)
-                    float edgeFade = smoothstep(0.0, 0.25, uv.y) * smoothstep(1.0, 0.75, uv.y);
-                    vec3 finalColor = mix(colorBg, color, edgeFade);
-
-                    gl_FragColor = vec4(finalColor, 1.0);
-                }
-            `
-        });
-
-        const mesh = new THREE.Mesh(geometry, material);
-        scene.add(mesh);
-
-        // Track pointer movements inside final-cta section
-        window.addEventListener('mousemove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            if (e.clientY >= rect.top && e.clientY <= rect.bottom) {
-                const x = (e.clientX - rect.left) / rect.width;
-                const y = 1.0 - ((e.clientY - rect.top) / rect.height);
-                uniforms.uTargetMouse.value.set(x, y);
-            }
-        });
-
-        window.addEventListener('touchmove', (e) => {
-            if (e.touches.length > 0) {
-                const rect = canvas.getBoundingClientRect();
-                const touch = e.touches[0];
-                if (touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
-                    const x = (touch.clientX - rect.left) / rect.width;
-                    const y = 1.0 - ((touch.clientY - rect.top) / rect.height);
-                    uniforms.uTargetMouse.value.set(x, y);
-                }
-            }
-        });
-
-        // Resize handler
-        window.addEventListener('resize', () => {
-            width = container.clientWidth;
-            height = container.clientHeight;
-            renderer.setSize(width, height);
-            uniforms.uResolution.value.set(width, height);
-        });
-
-        // Hide fallback & show canvas
-        canvas.style.opacity = '1';
-        const fallback = document.getElementById('final-cta-fallback');
-        if (fallback) fallback.style.opacity = '0';
-
-        const clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            uniforms.uMouse.value.lerp(uniforms.uTargetMouse.value, 0.05);
-            uniforms.uTime.value = clock.getElapsedTime();
-            renderer.render(scene, camera);
-        }
-        animate();
-    }
-
-    if (window.THREE) {
-        initHeroShader();
-        initRevealShader();
-        initManifestoShader();
-        initCtaShader();
-    }
-
-    // GSAP HERO ANIMATION
-    if (window.gsap) {
         gsap.from(".hero-title", {
             duration: 1.5,
             y: 50,
@@ -677,34 +308,24 @@ document.addEventListener('DOMContentLoaded', () => {
             ease: "power3.out",
             delay: 0.6
         });
-    }
 
-    // GSAP TRANSFORMATION REVEAL
-    if (window.gsap && window.ScrollTrigger) {
+        if (!window.ScrollTrigger) return;
         gsap.registerPlugin(ScrollTrigger);
 
         const revealTL = gsap.timeline({
             scrollTrigger: {
                 trigger: ".reveal-section",
                 start: "top top",
-                end: "+=150%",
-                scrub: 0.5,
-                pin: true,
-                anticipatePin: 1
+                end: "bottom bottom",
+                scrub: 0.35
             }
         });
 
-        // Animate shader uniform progress & badges in sync
         const revealObj = { progress: 0.0 };
         revealTL.to(revealObj, {
             progress: 1.0,
             ease: "none",
             onUpdate: () => {
-                if (useWebGLReveal && revealMaterial) {
-                    revealMaterial.uniforms.uProgress.value = revealObj.progress;
-                }
-                
-                // Animate HTML badges based on timeline progress
                 const badgeBefore = document.getElementById('badge-before');
                 const badgeAfter = document.getElementById('badge-after');
                 if (badgeBefore) {
@@ -718,13 +339,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }, 0);
 
-        // Maintain fallback CSS wipe animation in parallel
         revealTL.to("#reveal-before-box", {
             clipPath: "inset(0 100% 0 0)",
             ease: "none"
         }, 0);
 
-        // Fade out hint immediately as we start scrolling
         revealTL.to(".reveal-hint", {
             opacity: 0,
             scale: 0.5,
@@ -732,15 +351,133 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 0);
     }
 
-    // TINDER SWIPER LOGIC WITH 3D ELASTIC DRAG
+    function startVisualEngines() {
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        loadScriptOnce(runtimeAssets.three)
+            .then(() => {
+                if (!window.THREE) return;
+                // Defer to setTimeout to allow any dynamic script append layout invalidation tasks to settle, preventing forced reflow
+                setTimeout(() => {
+                    initHeroShader();
+                }, 50);
+            })
+            .catch(() => {});
+
+        loadScriptOnce(runtimeAssets.gsap)
+            .then(() => loadScriptOnce(runtimeAssets.scrollTrigger))
+            .then(() => {
+                // Defer to setTimeout to prevent layout thrashing from ScrollTrigger measuring trigger elements immediately
+                setTimeout(() => {
+                    initGsapMotion();
+                }, 50);
+            })
+            .catch(() => {});
+    }
+
+    const scheduleVisualEngines = () => {
+        let started = false;
+        const start = () => {
+            if (started) return;
+            started = true;
+            if ('requestIdleCallback' in window) {
+                requestIdleCallback(startVisualEngines, { timeout: 1200 });
+            } else {
+                startVisualEngines();
+            }
+        };
+
+        ['pointerdown', 'pointermove', 'scroll', 'keydown', 'touchstart'].forEach((eventName) => {
+            window.addEventListener(eventName, start, { once: true, passive: true });
+        });
+        setTimeout(start, 3500);
+    };
+
+    if (document.readyState === 'complete') {
+        scheduleVisualEngines();
+    } else {
+        window.addEventListener('load', scheduleVisualEngines, { once: true });
+    }
+
+    // PROFILE QUIZ SWIPER
     const swiperContainer = document.querySelector('.swiper-wrapper');
     if (swiperContainer) {
         const dislikeBtn = document.getElementById('swiper-dislike');
         const likeBtn = document.getElementById('swiper-like');
+        const originalCards = Array.from(swiperContainer.children).map((card) => card.cloneNode(true));
+        let quizScore = 0;
+        let answeredQuestions = 0;
+
+        const getQuestionTotal = () => swiperContainer.querySelectorAll('.quiz-card').length || 5;
+        let quizTotal = getQuestionTotal();
+
+        function setButtonState(isComplete) {
+            swiperContainer.classList.toggle('quiz-complete', isComplete);
+            if (dislikeBtn) dislikeBtn.disabled = isComplete;
+            if (likeBtn) likeBtn.disabled = isComplete;
+        }
+
+        function bindRestartButton() {
+            const restartBtn = document.getElementById('quiz-restart');
+            if (!restartBtn || restartBtn.dataset.bound) return;
+            restartBtn.dataset.bound = 'true';
+            restartBtn.addEventListener('click', resetQuiz);
+        }
+
+        function updateQuizResult() {
+            const scoreValue = document.getElementById('quiz-score-value');
+            const resultTitle = document.getElementById('quiz-result-title');
+            const resultCopy = document.getElementById('quiz-result-copy');
+
+            const outcomes = [
+                {
+                    min: 5,
+                    title: 'Starker Blick. Du erkennst Wirkung.',
+                    copy: 'Du siehst schon sehr gut, welche Bilder wirklich tragen. Jetzt geht es vor allem darum, diese Wirkung konsequent in eine starke Profil-Serie zu übersetzen.'
+                },
+                {
+                    min: 3,
+                    title: 'Gutes Auge, aber ein paar Bilder kosten Wirkung.',
+                    copy: 'Du erkennst viele Signale richtig. Wahrscheinlich liegt dein größter Hebel nicht bei einzelnen Fotos, sondern bei Reihenfolge, Kontext und dem Gefühl der ganzen Serie.'
+                },
+                {
+                    min: 0,
+                    title: 'Da liegt noch viel Match-Potenzial.',
+                    copy: 'Du bewertest Bilder vermutlich noch zu sehr nach Oberfläche. Gute Dating-Fotos müssen sofort Klarheit, Energie und echten Kontext liefern.'
+                }
+            ];
+
+            const outcome = outcomes.find((item) => quizScore >= item.min);
+            if (scoreValue) scoreValue.textContent = `${quizScore}/${quizTotal} Punkte`;
+            if (resultTitle && outcome) resultTitle.textContent = outcome.title;
+            if (resultCopy && outcome) resultCopy.textContent = outcome.copy;
+        }
+
+        function resetQuiz() {
+            swiperContainer.replaceChildren(...originalCards.map((card) => card.cloneNode(true)));
+            quizScore = 0;
+            answeredQuestions = 0;
+            quizTotal = getQuestionTotal();
+            setButtonState(false);
+            bindRestartButton();
+            initDragEvents();
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        }
 
         function swipe(direction, forceSwipe = false) {
             const activeCard = swiperContainer.querySelector('.swiper-card:nth-last-child(1)');
             if (!activeCard || activeCard.classList.contains('swiper-final-card')) return;
+
+            const correctDirection = activeCard.dataset.correct;
+            if (correctDirection) {
+                answeredQuestions += 1;
+                if (direction === correctDirection) {
+                    quizScore += 1;
+                }
+            }
 
             if (forceSwipe) {
                 activeCard.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.5s ease';
@@ -755,12 +492,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
             setTimeout(() => {
                 activeCard.remove();
-                const remainingCards = swiperContainer.querySelectorAll('.swiper-card');
-                if (remainingCards.length === 1 && remainingCards[0].classList.contains('swiper-final-card')) {
-                    if (dislikeBtn) dislikeBtn.style.opacity = '0.3';
-                    if (likeBtn) likeBtn.style.opacity = '0.3';
+                const remainingQuestions = swiperContainer.querySelectorAll('.quiz-card');
+                if (remainingQuestions.length === 0 || answeredQuestions >= quizTotal) {
+                    updateQuizResult();
+                    setButtonState(true);
                 }
-                initDragEvents(); // initialize drag events for next card in stack
+                initDragEvents();
             }, 450);
         }
 
@@ -796,12 +533,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 const deltaX = currentX - startX;
                 const deltaY = currentY - startY;
 
-                const rotate = deltaX * 0.08;
-                const rotateY = -deltaX * 0.04;
-                const rotateX = deltaY * 0.04;
-                const skew = deltaX * 0.03;
+                const rotate = deltaX * 0.07;
 
-                activeCard.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) rotate(${rotate}deg) rotateY(${rotateY}deg) rotateX(${rotateX}deg) skewX(${skew}deg)`;
+                activeCard.style.transform = `translate3d(${deltaX}px, ${deltaY}px, 0) rotate(${rotate}deg)`;
             };
 
             const onPointerUp = () => {
@@ -837,7 +571,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (dislikeBtn) dislikeBtn.addEventListener('click', () => swipe('left', true));
         if (likeBtn) likeBtn.addEventListener('click', () => swipe('right', true));
 
-        // Initial setup for the first card in stack
+        bindRestartButton();
         initDragEvents();
     }
 });

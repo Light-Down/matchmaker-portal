@@ -1,4 +1,10 @@
 .DS_Store
 .ruflo/
 tmp/
-
+.env
+.env.*
+!.env.example
+node_modules/
+.next/
+out/
+*.tsbuildinfo

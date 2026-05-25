@@ -1,6 +1,6 @@
 <?php
 $page_title = "Datenschutzerklärung";
-$meta_description = "Informationen zum Datenschutz gemäß DSGVO für MatchMaker Frankfurt.";
+$meta_description = "Datenschutzerklärung von MatchMaker Frankfurt gemäß DSGVO. Hier findest du alle Informationen zur Verarbeitung deiner personenbezogenen Daten auf unserer Website.";
 $noindex = true;
 include 'includes/header.php';
 ?>

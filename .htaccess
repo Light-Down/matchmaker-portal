@@ -43,6 +43,10 @@ RewriteCond %{THE_REQUEST} \s/dein-fotograf\.php [NC]
 RewriteRule ^ /dein-fotograf/ [L,R=301]
 
 RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
+RewriteCond %{THE_REQUEST} \s/tinder-fotoshooting\.php [NC]
+RewriteRule ^ /tinder-fotoshooting/ [L,R=301]
+
+RewriteCond %{HTTP_HOST} ^(www\.)?matchmaker-frankfurt\.de [NC]
 RewriteCond %{THE_REQUEST} \s/kontakt\.php [NC]
 RewriteRule ^ /kontakt/ [L,R=301]
 
@@ -88,6 +92,7 @@ RewriteRule ^$ /index.php [L]
 RewriteRule ^22-gruende/?$ /22-gruende.php [L,QSA]
 RewriteRule ^warum-es-funktioniert/?$ /warum-es-funktioniert.php [L,QSA]
 RewriteRule ^dein-fotograf/?$ /dein-fotograf.php [L,QSA]
+RewriteRule ^tinder-fotoshooting/?$ /tinder-fotoshooting.php [L,QSA]
 RewriteRule ^kontakt/?$ /kontakt.php [L,QSA]
 RewriteRule ^impressum/?$ /impressum.php [L,QSA]
 RewriteRule ^datenschutz/?$ /datenschutz.php [L,QSA]

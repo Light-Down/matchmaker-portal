@@ -62,6 +62,7 @@ $routes = [
     '/22-gruende' => '/22-gruende.php',
     '/warum-es-funktioniert' => '/warum-es-funktioniert.php',
     '/dein-fotograf' => '/dein-fotograf.php',
+    '/tinder-fotoshooting' => '/tinder-fotoshooting.php',
     '/kontakt' => '/kontakt.php',
     '/impressum' => '/impressum.php',
     '/datenschutz' => '/datenschutz.php',

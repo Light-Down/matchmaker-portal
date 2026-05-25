@@ -144,6 +144,60 @@ include 'includes/header.php';
     </div>
 </section>
 
+<!-- Psychology & Trust Section -->
+<section class="py-24 bg-black relative z-10 border-t border-white/5">
+    <div class="container mx-auto px-6 max-w-5xl">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+            <div class="trigger-elem scroll-fade-up">
+                <span class="text-xs font-mono text-pink-500 uppercase tracking-widest block mb-4">Dating-Psychologie</span>
+                <h2 class="text-4xl md:text-5xl font-black tracking-tighter uppercase text-white mb-6">
+                    Körpersprache <br>& Status-Signale
+                </h2>
+                <div class="space-y-6 text-gray-400 text-sm leading-relaxed">
+                    <p>
+                        Wissenschaftliche Untersuchungen zeigen, dass Frauen unbewusst auf drei Kernfaktoren bei Profilbildern achten: <strong class="text-white">Sicherheit, Status und Sozialkompetenz</strong>. Ein Badezimmerspiegel-Selfie oder ein grimmiges Auto-Selfie signalisiert soziale Isolation und mangelnden Aufwand.
+                    </p>
+                    <p>
+                        Ein professioneller Foto-Walk nutzt natürliche Hintergründe (z.B. Cafés, belebte Frankfurter Straßen) und echte Tageslichtstimmungen. Dies zeigt dich in einem dynamischen, aktiven Umfeld und signalisiert sozialen Wert ("Sozialer Beweis").
+                    </p>
+                    <p>
+                        Durch gezielte, entspannte Körperhaltung und einen freundlichen Blickkontakt auf Augenhöhe vermittelst du Nahbarkeit und emotionale Stabilität – Eigenschaften, nach denen Frauen bei der Selektion gezielt filtern.
+                    </p>
+                </div>
+            </div>
+            <div class="relative trigger-elem scroll-pop">
+                <div class="absolute inset-0 bg-gradient-to-tr from-red-600 to-pink-600 rounded-3xl blur-2xl opacity-15"></div>
+                <div class="relative bg-[#0c0c0e] border border-white/5 rounded-3xl p-8 space-y-6">
+                    <h4 class="text-white font-bold text-sm uppercase">Psychologische Filter bei Frauen:</h4>
+                    <ul class="space-y-4 text-xs text-gray-400">
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                            <div>
+                                <strong class="text-white block">Sicherheit statt Risiko:</strong>
+                                Unscharfe, dunkle Bilder wirken verdächtig und unzuverlässig (Anti-Catfish Schutzmechanismus).
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                            <div>
+                                <strong class="text-white block">Lebensfreude statt Monotonie:</strong>
+                                Lächeln und offene Arme wirken einladend, während verschränkte Arme oder fehlender Blickkontakt Abweisung signalisieren.
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="check" class="w-5 h-5 text-red-500 flex-shrink-0"></i>
+                            <div>
+                                <strong class="text-white block">Investition & Wertschätzung:</strong>
+                                Gute Fotos zeigen, dass dir dein Auftritt wichtig ist. Wer sich Mühe für seine Bilder gibt, zeigt auch im Dating Bemühung.
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- ELO-Score Explanation -->
 <section class="py-24 bg-[#050505] relative z-10 border-t border-white/5">
     <div class="container mx-auto px-6 max-w-5xl">

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Matchmaker">
+  <defs>
+    <linearGradient id="neon" x1="12" y1="8" x2="52" y2="56" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff655b"/>
+      <stop offset="0.5" stop-color="#fd2f7d"/>
+      <stop offset="1" stop-color="#dc2626"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 0.99 0 1 0 0 0.18 0 0 1 0 0.49 0 0 0 0.9 0"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="#050507"/>
+  <path filter="url(#glow)" fill="url(#neon)" d="M32 52s-2.7-2.1-6.2-5.1C16.9 39.3 11 34.2 11 25.9 11 19.7 15.8 15 22 15c3.6 0 7 1.7 9 4.5C33 16.7 36.4 15 40 15c6.2 0 11 4.7 11 10.9 0 8.3-5.9 13.4-14.8 21C34.7 49.9 32 52 32 52z"/>
+  <path fill="#fff" fill-opacity="0.92" d="M22 26h5.4l4.6 8.1 4.6-8.1H42v15h-5v-6.8l-3.5 6.1h-3l-3.5-6.1V41h-5V26z"/>
+</svg>

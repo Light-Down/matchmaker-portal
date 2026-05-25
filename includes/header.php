@@ -5,6 +5,12 @@ require_once __DIR__ . '/functions.php';
 $site_url = "https://matchmaker-frankfurt.de";
 $base_dir = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/\\');
 $canonical_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+$host = $_SERVER['HTTP_HOST'] ?? '';
+$portal_login_url = getenv('PORTAL_LOGIN_URL') ?: 'https://kunden.matchmaker-frankfurt.de/sign-in';
+
+if (preg_match('/^(127\.0\.0\.1|localhost)(:\d+)?$/', $host)) {
+    $portal_login_url = 'http://127.0.0.1:3100/sign-in';
+}
 
 // Strip base directory for local subfolders so canonical matches production domain root
 if (!empty($base_dir) && strpos($canonical_path, $base_dir) === 0) {
@@ -105,6 +111,7 @@ $breadcrumb_labels = [
     '22-gruende' => '22 Gründe',
     'warum-es-funktioniert' => 'Die Wissenschaft',
     'dein-fotograf' => 'Dein Fotograf',
+    'tinder-fotoshooting' => 'Tinder Fotoshooting',
     'ratgeber' => 'Ratgeber',
     'kontakt' => 'Kontakt',
     'impressum' => 'Impressum',
@@ -139,6 +146,7 @@ $schemaBreadcrumbPayload = [
     <?php meta_description(); ?>
     <meta name="author" content="Mark Olenberg">
     <link rel="author" type="text/plain" href="/humans.txt">
+    <link rel="icon" type="image/svg+xml" href="<?php echo asset_url('assets/favicon.svg'); ?>">
 
     <!-- Robot Control (Dynamic: index for public pages, noindex for legal pages) -->
     <?php if (isset($noindex) && $noindex): ?>
@@ -165,25 +173,6 @@ $schemaBreadcrumbPayload = [
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:image" content="<?php echo $site_url; ?>/assets/images/portrait-after.png">
 
-    <!-- Google Analytics (Loaded dynamically upon cookie consent) -->
-    <script>
-      function loadGoogleAnalytics() {
-        if (window.googleAnalyticsLoaded) return;
-        window.googleAnalyticsLoaded = true;
-        
-        var gaScript = document.createElement('script');
-        gaScript.async = true;
-        gaScript.src = "https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX";
-        document.head.appendChild(gaScript);
-        
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        window.gtag = gtag;
-        gtag('js', new Date());
-        gtag('config', 'G-XXXXXXXXXX', { 'anonymize_ip': true });
-      }
-    </script>
-
     <!-- JSON-LD Schema payloads -->
     <script type="application/ld+json">
     <?php echo json_encode($schemaOrgPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
@@ -198,43 +187,21 @@ $schemaBreadcrumbPayload = [
     <?php echo json_encode($schemaBreadcrumbPayload, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES); ?>
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    animation: {
-                        'text-flow': 'text-flow 3s linear infinite',
-                        'blob': 'blob 10s infinite',
-                    },
-                    keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
-                        },
-                        'text-flow': {
-                            '0%': { backgroundPosition: '0% 50%' },
-                            '50%': { backgroundPosition: '100% 50%' },
-                            '100%': { backgroundPosition: '0% 50%' },
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link rel="preload" href="<?php echo asset_url('assets/css/tailwind.css'); ?>" as="style">
+    <link rel="preload" href="<?php echo asset_url('assets/css/style.css'); ?>" as="style">
+    <link rel="preload" href="<?php echo $base_dir; ?>/assets/fonts/outfit-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="<?php echo $base_dir; ?>/assets/fonts/jetbrains-mono-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <?php if (isset($preload_hero_image)): ?>
+        <link rel="preload" href="<?php echo asset_url($preload_hero_image); ?>" as="image" fetchpriority="high">
+    <?php endif; ?>
+    <link rel="stylesheet" href="<?php echo asset_url('assets/css/tailwind.css'); ?>">
     <link rel="stylesheet" href="<?php echo asset_url('assets/css/style.css'); ?>">
 </head>
 
 <body class="min-h-screen bg-[#050505] selection:bg-red-500 selection:text-white">
 
     <!-- Texture -->
-    <div class="fixed inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-overlay"
-        style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');">
+    <div class="site-noise fixed inset-0 pointer-events-none opacity-[0.03] z-0 mix-blend-overlay">
     </div>
 
     <!-- MENÜ -->
@@ -257,6 +224,10 @@ $schemaBreadcrumbPayload = [
             class="pointer-events-auto text-2xl font-bold tracking-tighter text-white uppercase animate-text-flow bg-gradient-to-r from-red-500 via-pink-500 to-red-500 bg-[length:200%_auto] bg-clip-text text-transparent focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Match<span
                 class="text-white">maker</span></a>
     </div>
+    <a href="<?php echo htmlspecialchars($portal_login_url); ?>"
+        class="fixed top-[5.75rem] right-6 sm:top-6 sm:right-24 z-50 inline-flex min-h-11 items-center justify-center rounded-full border border-white/10 bg-black/45 px-4 text-xs font-black uppercase tracking-[0.18em] text-white/80 shadow-2xl backdrop-blur-xl transition hover:border-red-400/50 hover:bg-red-500/15 hover:text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505]">
+        Kundenbereich
+    </a>
     <nav id="menu-overlay"
         aria-label="Hauptnavigation"
         class="fixed inset-0 bg-[#050505]/95 backdrop-blur-xl z-40 flex flex-col items-center justify-center invisible opacity-0 peer-checked:visible peer-checked:opacity-100 transition-all duration-500 ease-in-out">
@@ -266,9 +237,23 @@ $schemaBreadcrumbPayload = [
             <a href="<?php echo $base_dir; ?>/warum-es-funktioniert/" class="text-3xl md:text-5xl text-white hover:text-red-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Die Wissenschaft</a>
             <a href="<?php echo $base_dir; ?>/dein-fotograf/" class="text-3xl md:text-5xl text-white hover:text-red-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Dein Fotograf</a>
             <a href="<?php echo $base_dir; ?>/ratgeber/" class="text-3xl md:text-5xl text-white hover:text-red-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Ratgeber</a>
+            <a href="<?php echo htmlspecialchars($portal_login_url); ?>" class="text-3xl md:text-5xl text-white hover:text-red-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Kundenbereich</a>
             <a href="<?php echo $base_dir; ?>/kontakt/" class="text-3xl md:text-5xl text-white hover:text-red-500 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-400 focus-visible:ring-offset-4 focus-visible:ring-offset-[#050505] rounded-sm">Kontakt</a>
         </div>
     </nav>
 
-    <!-- Main Content Wrapper (Optional, removed padding to fit design) -->
-    <main>
+    <!-- Main Content Wrapper -->
+    <main class="site-main">
+        <div class="ambient-glow-layer" aria-hidden="true">
+            <span class="ambient-glow ambient-glow-rose"></span>
+            <span class="ambient-glow ambient-glow-coral"></span>
+            <span class="ambient-glow ambient-glow-pink"></span>
+            <span class="ambient-glow ambient-glow-red"></span>
+            <span class="ambient-glow ambient-glow-amber"></span>
+            <span class="ambient-glow ambient-glow-magenta"></span>
+            <span class="ambient-glow ambient-glow-orange"></span>
+            <span class="ambient-glow ambient-glow-deep"></span>
+            <span class="ambient-glow ambient-glow-gold"></span>
+            <span class="ambient-glow ambient-glow-crimson"></span>
+            <span class="ambient-glow ambient-glow-final"></span>
+        </div>
