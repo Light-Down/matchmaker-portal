@@ -16,7 +16,7 @@ Dann öffnen: `http://127.0.0.1:3100`
 1. Neues Supabase-Projekt in `eu-central-1` anlegen.
 2. Migrationen aus `../supabase/migrations` per Supabase CLI oder GitHub Integration ausführen.
 3. In Supabase Auth die Site URL auf `NEXT_PUBLIC_PORTAL_BASE_URL` setzen.
-4. Redirect URL ergänzen: `http://127.0.0.1:3100/auth/callback` lokal und später `https://portal.<domain>/auth/callback`.
+4. Redirect URL ergänzen: `http://127.0.0.1:3100/auth/callback` lokal und später `https://matchmaker-frankfurt.de/auth/callback` oder `https://portal.matchmaker-frankfurt.de/auth/callback`.
 5. Werte aus `.env.example` in `.env` bzw. Hostinger Environment Variables setzen.
 6. Admin-E-Mail in `ADMIN_EMAILS` eintragen.
 7. Kunden im Adminbereich anlegen; der erste Login verknüpft den Supabase-Auth-User automatisch mit dem Client-Datensatz.

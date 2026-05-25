@@ -8,10 +8,11 @@ max_rows = 1000
 
 [auth]
 enabled = true
-site_url = "http://127.0.0.1:3100"
+site_url = "https://matchmaker-frankfurt.de"
 additional_redirect_urls = [
   "http://127.0.0.1:3100/auth/callback",
-  "https://portal.example.com/auth/callback"
+  "https://matchmaker-frankfurt.de/auth/callback",
+  "https://portal.matchmaker-frankfurt.de/auth/callback"
 ]
 enable_signup = true
 
@@ -19,6 +20,9 @@ enable_signup = true
 enable_signup = true
 double_confirm_changes = true
 enable_confirmations = false
+max_frequency = "1m0s"
+otp_length = 6
+otp_expiry = 600
 
 [db]
 major_version = 17
