@@ -115,6 +115,7 @@ create index if not exists onboarding_answers_client_idx on public.onboarding_an
 create index if not exists appointments_client_kind_idx on public.appointments(client_id, kind);
 create index if not exists portal_events_client_idx on public.portal_events(client_id, created_at desc);
 create index if not exists simulator_sessions_client_idx on public.simulator_sessions(client_id);
+create index if not exists simulator_messages_session_idx on public.simulator_messages(session_id);
 create index if not exists simulator_messages_client_session_idx on public.simulator_messages(client_id, session_id, sort_index);
 create index if not exists coach_memories_client_idx on public.coach_memories(client_id);
 
