@@ -702,7 +702,7 @@ include 'includes/header.php';
 <section id="swiper-section" class="relative py-32 bg-[#050505] overflow-hidden border-t border-white/5">
     <div class="container mx-auto px-6 relative z-10">
         <div class="max-w-3xl mx-auto text-center mb-16 trigger-elem scroll-fade-up">
-            <span class="text-xs font-mono text-red-500 uppercase tracking-widest block mb-4">Profil-Check</span>
+            <span class="text-xs font-mono text-red-500 uppercase tracking-widest block mb-4">Foto-Wissen</span>
             <h2 class="text-4xl md:text-6xl font-black tracking-tighter uppercase mb-6 text-white">
                 Wie gut liest du <span class="text-gradient">Dating-Fotos?</span>
             </h2>
@@ -998,25 +998,6 @@ include 'includes/header.php';
                 </div>
             </div>
 
-            <!-- Question 8 -->
-            <div class="focus-card rounded-3xl p-8 flex flex-col justify-between trigger-elem scroll-fade-up">
-                <div class="flex items-center gap-3 mb-6 pb-4 border-b border-white/5">
-                    <div class="w-6 h-6 rounded-full bg-red-500/10 flex items-center justify-center text-red-500 text-xs font-mono">8</div>
-                    <div class="text-xs font-bold text-gray-400 uppercase tracking-widest">Bio & Profil</div>
-                </div>
-                <div class="space-y-4 flex-grow flex flex-col justify-end">
-                    <div class="flex justify-start">
-                        <div class="bubble-in px-5 py-3 text-sm rounded-tr-xl rounded-bl-xl rounded-br-xl rounded-tl-sm w-fit max-w-[85%]">
-                            "Helft ihr mir auch beim Schreiben meiner Bio?"
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <div class="bubble-out px-5 py-3 text-sm rounded-tl-xl rounded-bl-xl rounded-br-sm rounded-tr-xl w-fit max-w-[85%] shadow-lg leading-relaxed">
-                            Klar! In den Paketen "Match-Magnet" & "Wingman" machen wir einen Voll-Check deines Profils. Wir optimieren deine Bio, damit sie perfekt mit deinen neuen Fotos harmonieert und dir mehr Anfragen bringt.
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         </div>
     </div>
